@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>イディオム51〜75 フラッシュカード</title>
+<style>
+:root{--bg:#f2f4ef;--card:#fff;--ink:#16302b;--sub:#5d716c;--line:#d5dcd6;--acc:#0d6b5c;--accsoft:#dcefe9;--ng:#b4432f;--ngsoft:#f6e0da;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a18;--card:#182623;--ink:#e8f1ee;--sub:#97aea8;--line:#2d3f3b;--acc:#5fc4ad;--accsoft:#1c3a34;--ng:#f08a74;--ngsoft:#3d2621}}
+:root[data-theme="dark"]{--bg:#101a18;--card:#182623;--ink:#e8f1ee;--sub:#97aea8;--line:#2d3f3b;--acc:#5fc4ad;--accsoft:#1c3a34;--ng:#f08a74;--ngsoft:#3d2621}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;display:flex;flex-direction:column;max-width:560px;margin:0 auto;padding:12px 16px 16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{font-size:15px;margin:0;font-weight:700}
+.prog{font-size:13px;color:var(--sub)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:10px 0;overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13px;font-family:inherit}
+.chip[aria-pressed="true"]{background:var(--accsoft);border-color:var(--acc);color:var(--acc);font-weight:700}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;perspective:1200px;margin:12px 0;min-height:0}
+.card{width:100%;height:100%;max-height:420px;position:relative;transform-style:preserve-3d;transition:transform .35s;cursor:pointer;outline:none}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:auto}
+.back{transform:rotateY(180deg)}
+.no{position:absolute;top:14px;left:18px;font-size:13px;color:var(--sub)}
+.tag{position:absolute;top:14px;right:18px;font-size:12px;border-radius:999px;padding:3px 9px}
+.tag.ok{background:var(--accsoft);color:var(--acc)}.tag.ng{background:var(--ngsoft);color:var(--ng)}
+.big{font-size:27px;font-weight:700;line-height:1.35;word-break:break-word}
+.big.jp{font-size:24px}
+.mid{font-size:18px;color:var(--sub);margin-top:14px}
+.ex{margin-top:18px;font-size:17px;line-height:1.5;text-align:left;background:var(--bg);border-radius:12px;padding:12px 14px;width:100%}
+.exjp{font-size:15px;color:var(--sub);margin-top:8px;line-height:1.5}
+.spk{margin-top:14px;border:1px solid var(--acc);background:var(--accsoft);color:var(--acc);border-radius:999px;padding:9px 18px;font-size:15px;font-weight:700;font-family:inherit}
+.hint{font-size:12px;color:var(--sub);margin-top:16px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:14px;padding:16px 8px;font-size:16px;font-weight:700;font-family:inherit}
+.btn.ng{background:var(--ngsoft);color:var(--ng)}.btn.ok{background:var(--acc);color:var(--bg)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 16px;font-size:14px;font-family:inherit}
+.nav span{font-size:13px;color:var(--sub)}
+.done{text-align:center;padding:30px 10px}.done .big{font-size:22px}
+.done button{margin-top:16px}
+button:focus-visible,.card:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.card,.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header><h1>イディオム 51〜75</h1><div class="prog" id="prog"></div></header>
+<div class="bar"><i id="barOk"></i></div>
+<div class="opts">
+<button class="chip" id="mDir" aria-pressed="false">日本語 → 英語</button>
+<button class="chip" id="mNg" aria-pressed="false">まだ だけ</button>
+<button class="chip" id="mShuf" aria-pressed="false">シャッフル</button>
+<button class="chip" id="mVoice" style="display:none">声を変える</button>
+<button class="chip" id="mReset">リセット</button>
+</div>
+<div class="stage" id="stage"></div>
+<div class="acts" id="acts">
+<button class="btn ng" id="bNg">まだ</button>
+<button class="btn ok" id="bOk">わかった</button>
+</div>
+<div class="nav"><button id="prev">前へ</button><span id="pos"></span><button id="next">次へ</button></div>
+<script>
+var D=[
+[51,"get in touch with A","Aに連絡をとる","I will get in touch with you tomorrow.","明日あなたに連絡します。"],
+[52,"get over A","A(困難など)を乗り越える (= overcome)","He got over the illness.","彼は病気を乗り越えた。"],
+[53,"get rid of A","Aを取り除く・処分する (= remove)","I want to get rid of stress.","ストレスを取り除きたい。"],
+[54,"get to A","Aに到着する (= arrive at A)","I got to the station at eight.","私は8時に駅に着いた。"],
+[55,"go through A","Aを経験する","She went through hard times.","彼女はつらい時期を経験した。"],
+[56,"have A in common","Aを共通に持つ","Japan and Korea have a lot in common.","日本と韓国には共通点がたくさんある。"],
+[57,"have nothing to do with A","Aと無関係である","I have nothing to do with the accident.","私はその事故とは無関係だ。"],
+[58,"have something to do with A","Aと何か関係がある","I think Jack has something to do with it.","ジャックはそれと何か関係があると思う。"],
+[59,"hear from A","Aから連絡をもらう","I haven’t heard from him lately.","最近、彼から連絡がない。"],
+[60,"hear of A","Aを耳にする","I have never heard of that movie.","その映画のことは聞いたことがない。"],
+[61,"keep A in mind","Aを心にとめておく (= remember)","Keep what I said in mind.","私が言ったことを心にとめておいてね。"],
+[62,"keep an eye on A","Aをじっと見ておく","Please keep an eye on my bag.","私のかばんを見ていてください。"],
+[63,"keep up with A","Aに遅れずについていく","He speaks so fast that I can’t keep up with him.","彼は話すのが速すぎて、私はついていけない。"],
+[64,"lead to A","Aにつながる・引き起こす (= cause)","Your careless mistake led to the accident.","あなたの不注意なミスがその事故につながった。"],
+[65,"look after A","Aの世話をする (= take care of A)","I look after my cat.","私は猫の世話をしている。"],
+[66,"look back on A","A(過去のこと)を思い出す","I often look back on my childhood.","私はよく子どものころを思い出す。"],
+[67,"look down on A","Aを見下す","Don’t look down on poor people.","貧しい人々を見下してはいけない。"],
+[68,"look for A","Aをさがす","I’m looking for a job.","私は仕事をさがしている。"],
+[69,"look forward to A(~ing)","Aを楽しみにする","I’m looking forward to seeing you.","あなたに会えるのを楽しみにしています。"],
+[70,"look up to A","Aを尊敬する (= respect)","Talk about someone you look up to.","あなたが尊敬する人について話してください。"],
+[71,"make fun of A","Aをからかう","Don’t make fun of his appearance.","彼の外見をからかってはいけない。"],
+[72,"make the most of A","Aを最大限に生かす","Make the most of the opportunity.","その機会を最大限に生かしなさい。"],
+[73,"pay attention to A","Aに注目する","Pay attention to the lecture.","講義に注意を払いなさい。"],
+[74,"pay for A","Aのお金を払う","I’ll pay for the dinner.","夕食代は私が払います。"],
+[75,"play a ~ part/role (in A)","(Aの中で)~な役割を果たす","Music plays an important role in our lives.","音楽は私たちの生活で重要な役割を果たしている。"]
+];
+var K="idm5175",S={ng:{},ok:{},enFirst:false};
+try{var t=JSON.parse(localStorage.getItem(K)||"null");if(t){S=t}}catch(e){}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+var onlyNg=false,shuf=false,deck=[],i=0,flipped=false;
+function $(id){return document.getElementById(id)}
+function build(){
+ var a=D.filter(function(d){return !onlyNg||!S.ok[d[0]]});
+ if(shuf){a=a.slice();for(var j=a.length-1;j>0;j--){var r=Math.floor(Math.random()*(j+1));var x=a[j];a[j]=a[r];a[r]=x}}
+ deck=a;if(i>=deck.length)i=0;flipped=false;render();
+}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function render(){
+ var okN=D.filter(function(d){return S.ok[d[0]]}).length;
+ $("prog").textContent="わかった "+okN+" / "+D.length;
+ $("barOk").style.width=(okN/D.length*100)+"%";
+ $("mDir").textContent=S.enFirst?"英語 → 日本語":"日本語 → 英語";
+ $("mDir").setAttribute("aria-pressed",S.enFirst);
+ $("mNg").setAttribute("aria-pressed",onlyNg);
+ $("mShuf").setAttribute("aria-pressed",shuf);vlabel();
+ var st=$("stage");
+ if(!deck.length){
+  st.innerHTML='<div class="done"><div class="big">全部「わかった」になりました</div><div class="mid">「まだ だけ」を外すと全カードを復習できます。</div></div>';
+  $("acts").style.visibility="hidden";$("pos").textContent="";return;
+ }
+ $("acts").style.visibility="visible";
+ var d=deck[i],tag=S.ok[d[0]]?'<span class="tag ok">わかった</span>':(S.ng[d[0]]?'<span class="tag ng">まだ</span>':'');
+ var en='<div class="big">'+esc(d[1])+'</div>',jp='<div class="big jp">'+esc(d[2])+'</div>';
+ var front=S.enFirst?en:jp,back=S.enFirst?jp:en;
+ var ex='<div class="ex">'+esc(d[3])+'<div class="exjp">'+esc(d[4])+'</div></div>';
+ st.innerHTML='<div class="card'+(flipped?' flip':'')+'" id="card" tabindex="0" role="button" aria-label="カードをめくる">'+
+ '<div class="face"><span class="no">'+d[0]+'</span>'+tag+front+'<div class="hint">タップでめくる</div></div>'+
+ '<div class="face back"><span class="no">'+d[0]+'</span>'+tag+back+ex+'<button class="spk" id="spk">英語で聞く</button></div></div>';
+ var sp=$("spk");sp.onclick=function(e){e.stopPropagation();speak(d[3])};sp.onkeydown=function(e){e.stopPropagation()};
+ var c=$("card");c.onclick=flip;c.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();flip()}};
+ $("pos").textContent=(i+1)+" / "+deck.length;
+}
+var VS=[],VOICE=null;
+function vscore(x){var n=x.name,s=0;if(/premium|enhanced|natural|neural/i.test(n))s+=4;if(/Samantha|Ava|Allison|Susan|Zoe|Evan|Nathan|Aria|Jenny|Serena|Daniel|Karen|Moira|Tessa/i.test(n))s+=3;if(/Google/i.test(n))s+=2;if(/^en[-_]US/i.test(x.lang))s+=1;return s}
+function loadVoices(){try{var bad=/Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Junior|Organ|Superstar|Trinoids|Whisper|Zarvox|Fred|Ralph|Kathy|Princess|Grandma|Grandpa/i;VS=speechSynthesis.getVoices().filter(function(x){return /^en[-_]/i.test(x.lang)&&!bad.test(x.name)});VS.sort(function(a,b){return vscore(b)-vscore(a)});VOICE=VS.filter(function(x){return x.name===S.voice})[0]||VS[0]||null}catch(e){}vlabel()}
+function vlabel(){var b=$("mVoice");if(!b)return;b.style.display=VS.length?"":"none";b.textContent="声: "+(VOICE?VOICE.name.split("(")[0].trim().slice(0,14):"")}
+function speak(t){try{var u=new SpeechSynthesisUtterance(t);u.lang=VOICE?VOICE.lang:"en-US";if(VOICE)u.voice=VOICE;u.rate=0.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+try{speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+loadVoices();
+function flip(){flipped=!flipped;$("card").classList.toggle("flip",flipped)}
+function go(n){if(!deck.length)return;i=(i+n+deck.length)%deck.length;flipped=false;render()}
+function mark(ok){
+ if(!deck.length)return;var n=deck[i][0];
+ if(ok){S.ok[n]=1;delete S.ng[n]}else{S.ng[n]=1;delete S.ok[n]}
+ save();
+ if(onlyNg&&ok){build()}else{go(1)}
+}
+$("bOk").onclick=function(){mark(true)};
+$("bNg").onclick=function(){mark(false)};
+$("prev").onclick=function(){go(-1)};
+$("next").onclick=function(){go(1)};
+$("mDir").onclick=function(){S.enFirst=!S.enFirst;save();flipped=false;render()};
+$("mNg").onclick=function(){onlyNg=!onlyNg;i=0;build()};
+$("mShuf").onclick=function(){shuf=!shuf;i=0;build()};
+$("mVoice").onclick=function(){if(!VS.length)return;var k=VS.indexOf(VOICE);VOICE=VS[(k+1)%VS.length];S.voice=VOICE.name;save();vlabel();speak(deck.length?deck[i][3]:"Hello.")};
+$("mReset").onclick=function(){if(confirm("進み具合をリセットしますか?")){S.ok={};S.ng={};save();i=0;build()}};
+var x0=null;
+$("stage").addEventListener("touchstart",function(e){x0=e.touches[0].clientX},{passive:true});
+$("stage").addEventListener("touchend",function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>60)go(dx<0?1:-1)},{passive:true});
+build();
+</script>
+</body>
+</html>
